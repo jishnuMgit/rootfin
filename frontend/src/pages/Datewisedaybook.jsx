@@ -48,7 +48,7 @@ const Datewisedaybook = () => {
 
     const handleFetch = () => {
 
-        const baseUrl1 = "http://15.207.90.158:5005/api/GetBooking";
+        const baseUrl1 = "https://rentalapi.rootments.live/api/GetBooking";
         const updatedApiUrl = `${baseUrl1}/GetBookingList?LocCode=${currentusers.locCode}&DateFrom=${fromDate}&DateTo=${toDate}`;
         const updatedApiUrl1 = `${baseUrl1}/GetRentoutList?LocCode=${currentusers.locCode}&DateFrom=${fromDate}&DateTo=${toDate}`;
         const updatedApiUrl2 = `${baseUrl1}/GetReturnList?LocCode=${currentusers.locCode}&DateFrom=${fromDate}&DateTo=${toDate}`;

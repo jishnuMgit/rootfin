@@ -25,7 +25,7 @@ const DayBook = () => {
 
 
     const handleFetch = () => {
-        const baseUrl = "http://15.207.90.158:5005/api/GetBooking";
+        const baseUrl = "https://rentalapi.rootments.live/api/GetBooking";
         if (!fromDate || !toDate) {
             return alert("select date ")
         } else {

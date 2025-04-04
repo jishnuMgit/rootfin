@@ -20,7 +20,7 @@ import useFetch from '../hooks/useFetch.jsx';
 // ];
 
 const Booking = () => {
-    // const api = `http://15.207.90.158:5005/api/GetBooking/GetBookingListDateWise?LocCode=144&DateFrom=2025-03-01&DateTo=2025-03-24`;
+    // const api = `https://rentalapi.rootments.live/api/GetBooking/GetBookingListDateWise?LocCode=144&DateFrom=2025-03-01&DateTo=2025-03-24`;
     const [fromDate, setFromDate] = useState("");
 
     const [toDate, setToDate] = useState("");
@@ -28,7 +28,7 @@ const Booking = () => {
 
 
     const handleFetch = () => {
-        const baseUrl = "http://15.207.90.158:5005/api/GetBooking";
+        const baseUrl = "https://rentalapi.rootments.live/api/GetBooking";
         if (!fromDate || !toDate) {
             return alert("select date ")
         } else {
