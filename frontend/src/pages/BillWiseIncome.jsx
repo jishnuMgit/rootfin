@@ -75,7 +75,7 @@ const DayBookInc = () => {
     const apiUrl4 = `${baseUrl.baseUrl}user/Getpayment?LocCode=${currentusers.locCode}&DateFrom=${currentDate}&DateTo=${currentDate}`;
     const apiUrl5 = `${baseUrl.baseUrl}user/saveCashBank`
     const apiUrl6 = `${baseUrl.baseUrl}user/getsaveCashBank?locCode=${currentusers.locCode}&date=${formattedDate}`
-
+    alert(apiurl1)
 
     const locCode = currentusers.locCode
 
@@ -358,7 +358,7 @@ const DayBookInc = () => {
                                                         {transaction.Category === 'RentOut' ? (
                                                             <>
                                                                 <tr key={`${index}-1`}>
-                                                                    <td className="border p-2">{transaction.bookingDate}</td>
+                                                                    <td className="border p-2">{transaction.rentOutDate || transaction.bookingDate}</td>
                                                                     <td className="border p-2">{transaction.invoiceNo}</td>
                                                                     <td className="border p-2">{transaction.customerName}</td>
                                                                     <td rowSpan="2" className="border p-2">{transaction.Category}</td> {/* Merged Row */}
@@ -374,7 +374,7 @@ const DayBookInc = () => {
                                                                 </tr>
 
                                                                 <tr key={`${index}-2`}>
-                                                                    <td className="border p-2">{transaction.bookingDate}</td> {/* Repeated Row */}
+                                                                    <td className="border p-2">{transaction.rentOutDate || transaction.bookingDate}</td> {/* Repeated Row */}
                                                                     <td className="border p-2">{transaction.invoiceNo}</td>
                                                                     <td className="border p-2">{transaction.customerName}</td>
                                                                     {/* Category is skipped due to rowSpan */}
@@ -390,7 +390,7 @@ const DayBookInc = () => {
                                                             </>
                                                         ) : (
                                                             <tr key={index}>
-                                                                <td className="border p-2">{transaction.bookingDate || transaction.date}</td>
+                                                                <td className="border p-2">{transaction.returnedDate || transaction.rentOutDate || transaction.cancelDate || transaction.bookingDate || transaction.date}</td>
                                                                 <td className="border p-2">{transaction.invoiceNo || transaction.locCode}</td>
                                                                 <td className="border p-2">{transaction.customerName}</td>
                                                                 <td className="border p-2">{transaction.Category || transaction.type}</td>
