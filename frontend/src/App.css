@@ -1,0 +1,14 @@
+@media print {
+    table {
+        table-layout: fixed;  /* Ensures equal column width */
+        width: 100%;
+    }
+
+    th, td {
+        white-space: nowrap;  /* Prevents text from breaking */
+        overflow: hidden;
+        text-overflow: ellipsis;
+        padding: 8px;
+        border: 1px solid #000;
+    }
+}
