@@ -227,7 +227,7 @@ const DayBookInc = () => {
             ((parseInt(item.deleteCashAmount, 10) || 0) * -1) + // Ensure deletion is properly subtracted
             (parseInt(item.returnCashAmount, 10) || 0),
             0
-        ) + (parseInt(preOpen?.cash, 10) || 0)
+        ) + (parseInt(preOpen?.Closecash, 10) || 0)
     );
 
     const savedData = {
@@ -346,7 +346,7 @@ const DayBookInc = () => {
                                             {/* Opening Balance */}
                                             <tr className="bg-gray-100">
                                                 <td colSpan="9" className="border p-2 font-bold">OPENING BALANCE</td>
-                                                <td className="border p-2 font-bold">{preOpen.cash
+                                                <td className="border p-2 font-bold">{preOpen.Closecash
                                                 }</td>
                                                 <td className="border p-2 font-bold">{preOpen.bank}</td>
                                             </tr>

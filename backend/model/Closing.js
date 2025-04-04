@@ -7,6 +7,10 @@ const CloseSchema = new mongoose.Schema(
             type: Number,
             required: true,
         },
+        Closecash: {
+            type: Number,
+            required: true,
+        },
         bank: {
             type: Number,
             required: true,

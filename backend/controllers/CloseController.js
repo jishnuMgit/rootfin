@@ -2,7 +2,7 @@ import CloseTransaction from "../model/Closing.js";
 
 export const CloseController = async (req, res) => {
     try {
-        const { totalBankAmount: bank, totalAmount: cash, locCode, date } = req.body;
+        const { totalBankAmount: bank, totalAmount: cash, locCode, date,totalCash:Closecash } = req.body;
 
         if (bank === undefined || cash === undefined || !locCode) {
             return res.status(400).json({
@@ -30,6 +30,7 @@ export const CloseController = async (req, res) => {
         // Save the transaction with today's date
         const CloseCashBank = new CloseTransaction({
             bank,
+            Closecash,
             cash,
             locCode,
             date: today, // Ensure date is today
