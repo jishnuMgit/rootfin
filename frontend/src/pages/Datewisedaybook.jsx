@@ -43,6 +43,7 @@ const Datewisedaybook = () => {
     const [apiUrl3, setApiUrl3] = useState("");
     const [apiUrl4, setApiUrl4] = useState("");
     const [apiUrl5, setApiUrl5] = useState("");
+    console.log(apiUrl5);
 
     const currentusers = JSON.parse(localStorage.getItem("rootfinuser")); // Convert back to an object
 
@@ -295,7 +296,7 @@ const Datewisedaybook = () => {
                                             {transaction.Category === 'RentOut' ? (
                                                 <>
                                                     <tr key={`${index}-1`}>
-                                                        <td className="border p-2">{transaction.bookingDate}</td>
+                                                        <td className="border p-2">{transaction.rentOutDate || transaction.bookingDate}</td>
                                                         <td className="border p-2">{transaction.invoiceNo}</td>
                                                         <td className="border p-2">{transaction.customerName}</td>
                                                         <td rowSpan="2" className="border p-2">{transaction.Category}</td> {/* Merged Row */}
@@ -311,7 +312,7 @@ const Datewisedaybook = () => {
                                                     </tr>
 
                                                     <tr key={`${index}-2`}>
-                                                        <td className="border p-2">{transaction.bookingDate}</td> {/* Repeated Row */}
+                                                        <td className="border p-2">{transaction.rentOutDate || transaction.bookingDate}</td> {/* Repeated Row */}
                                                         <td className="border p-2">{transaction.invoiceNo}</td>
                                                         <td className="border p-2">{transaction.customerName}</td>
                                                         {/* Category is skipped due to rowSpan */}
@@ -327,7 +328,7 @@ const Datewisedaybook = () => {
                                                 </>
                                             ) : (
                                                 <tr key={index}>
-                                                    <td className="border p-2">{transaction.bookingDate || transaction.date}</td>
+                                                    <td className="border p-2">{transaction.returnedDate || transaction.rentOutDate || transaction.cancelDate || transaction.bookingDate || transaction.date}</td>
                                                     <td className="border p-2">{transaction.invoiceNo || transaction.locCode}</td>
                                                     <td className="border p-2">{transaction.customerName}</td>
                                                     <td className="border p-2">{transaction.Category || transaction.type}</td>
