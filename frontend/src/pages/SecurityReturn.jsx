@@ -23,7 +23,7 @@ const categories = [
 
 const categories1 = [
     { value: "Compensation", label: "compensation" },
-    { value: "sell shoes", label: "sell shoes" }
+    { value: "shoes sales", label: "shoes sales" }
 
 ];
 
