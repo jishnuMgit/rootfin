@@ -21,9 +21,16 @@ const categories = [
     { value: "Others", label: "Others" },
 ];
 
+const categories1 = [
+    { value: "Compensation", label: "compensation" },
+    { value: "sell shoes", label: "sell shoes" }
+
+];
+
 const SecurityReturn = () => {
     const [selectedOption, setSelectedOption] = useState("radioDefault02"); // Default: Expense
     const [selectedCategory, setSelectedCategory] = useState(categories[0]); // Default Category
+    const [InselectedCategory, insetSelectedCategory] = useState(categories1[0]);
     const [Iselected, setIselected] = useState(false);
     const [amount, setAmount] = useState("");
     const [remark, setRemark] = useState("");
@@ -49,7 +56,7 @@ const SecurityReturn = () => {
 
         const transactionData = {
             type: selectedOption === "radioDefault01" ? "income" : "expense",
-            category: Iselected ? "compensation" : selectedCategory.value,
+            category: Iselected ? InselectedCategory.value : selectedCategory.value,
             remark: remark,
             locCode: currentusers.locCode,
             amount: selectedOption === "radioDefault01" ? amount : `-${amount}`,
@@ -148,11 +155,11 @@ const SecurityReturn = () => {
                                     className="w-[250px]"
                                 />
                             ) : (
-                                <input
-                                    className="border border-gray-600 p-2 px-2 rounded-md"
-                                    value="compensation"
-                                    type="text"
-                                    readOnly
+                                <Select
+                                    options={categories1}
+                                    value={InselectedCategory}
+                                    onChange={insetSelectedCategory}
+                                    className="w-[250px]"
                                 />
                             )}
                         </div>

@@ -60,7 +60,7 @@ const Security = () => {
         // setApiUrl(updatedApiUrl);
         setApiUrl1(updatedApiUrl1);
         setApiUrl2(updatedApiUrl2);
-        alert(updatedApiUrl2)
+        // alert(updatedApiUrl2)
         // setApiUrl3(updatedApiUrl3)
         // setApiUrl4(updatedApiUrl4)
         // setApiUrl5(updatedApiUrl5)
