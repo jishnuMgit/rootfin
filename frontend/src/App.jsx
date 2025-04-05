@@ -7,6 +7,7 @@ import SecurityReturn from "./pages/SecurityReturn";
 import SecurityPending from "./pages/SecurityPending";
 import Nav from "./components/Nav.jsx";
 import Login from "./pages/Login.jsx";
+import Security from "./pages/Security.jsx";
 
 const App = () => {
   const location = useLocation();
@@ -30,6 +31,7 @@ const App = () => {
           <Route path="/RentOutReport" element={currentuser ? <DayBook /> : <Navigate to="/login" />} />
           <Route path="/Income&Expenses" element={currentuser ? <SecurityReturn /> : <Navigate to="/login" />} />
           <Route path="/CashBankLedger" element={currentuser ? <SecurityPending /> : <Navigate to="/login" />} />
+          <Route path="/securityReport" element={currentuser ? <Security /> : <Navigate to='/login' />} />
 
         </Routes>
       </div>

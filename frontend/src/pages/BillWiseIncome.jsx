@@ -215,7 +215,7 @@ const DayBookInc = () => {
             (parseInt(item.deleteUPIAmount, 10) || 0) * -1 + // Ensure negative value is applied correctly
             (parseInt(item.returnBankAmount, 10) || 0),
             0
-        ) || 0) + (parseInt(preOpen?.bank, 10) || 0);
+        ) || 0);
 
 
     const totalCash = (
@@ -348,7 +348,7 @@ const DayBookInc = () => {
                                                 <td colSpan="9" className="border p-2 font-bold">OPENING BALANCE</td>
                                                 <td className="border p-2 font-bold">{preOpen.Closecash
                                                 }</td>
-                                                <td className="border p-2 font-bold">{preOpen.bank}</td>
+                                                <td className="border p-2 font-bold">0</td>
                                             </tr>
 
                                             {/* Transactions */}

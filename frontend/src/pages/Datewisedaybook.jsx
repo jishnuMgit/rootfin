@@ -1,5 +1,5 @@
 import Headers from '../components/Header.jsx';
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import Select from "react-select";
 import useFetch from '../hooks/useFetch.jsx';
 import baseUrl from '../api/api.js';
@@ -92,6 +92,27 @@ const Datewisedaybook = () => {
     };
     useEffect(() => {
     }, [])
+    const printRef = useRef(null);
+
+    const handlePrint = () => {
+        const printContent = printRef.current.innerHTML;
+        const originalContent = document.body.innerHTML;
+        console.log(originalContent);
+
+
+        document.body.innerHTML = `<html><head><title>Dummy Report</title>
+            <style>
+                @page { size: tabloid; margin: 10mm; }
+                body { font-family: Arial, sans-serif; }
+                table { width: 100%; border-collapse: collapse; }
+                th, td { border: 1px solid black; padding: 8px; text-align: left; white-space: nowrap; }
+                tr { break-inside: avoid; }
+            </style>
+        </head><body>${printContent}</body></html>`;
+
+        window.print();
+        window.location.reload(); // Reload to restore content
+    };
 
     // Memoizing fetch options
     const fetchOptions = useMemo(() => ({}), []);
@@ -193,7 +214,7 @@ const Datewisedaybook = () => {
             (parseInt(item.deleteUPIAmount, 10) || 0) * -1 + // Ensure negative value is applied correctly
             (parseInt(item.returnBankAmount, 10) || 0),
             0
-        ) || 0) + (parseInt(preOpen?.bank, 10) || 0);
+        ) || 0);
 
     const totalCash = (
         filteredTransactions?.reduce((sum, item) =>
@@ -262,8 +283,9 @@ const Datewisedaybook = () => {
 
                     </div>
 
-                    {/* Table */}
-                    <div className="bg-white p-4 shadow-md rounded-lg ">
+<div ref={printRef}>
+  {/* Table */}
+  <div className="bg-white p-4 shadow-md rounded-lg ">
                         <table className="w-full border-collapse border rounded-md border-gray-300">
                             <thead className='rounded-md'>
                                 <tr className="bg-[#7C7C7C] rounded-md text-white">
@@ -286,7 +308,7 @@ const Datewisedaybook = () => {
                                     <td colSpan="9" className="border p-2 font-bold">OPENING BALANCE</td>
                                     <td className="border p-2 font-bold">{preOpen.cash
                                     }</td>
-                                    <td className="border p-2 font-bold">{preOpen.bank}</td>
+                                    <td className="border p-2 font-bold">0</td>
                                 </tr>
 
                                 {/* Transactions */}
@@ -434,6 +456,11 @@ const Datewisedaybook = () => {
 
                         </table>
                     </div>
+</div>
+                  
+                    <button onClick={handlePrint} className="mt-6 w-[200px] float-right cursor-pointer bg-blue-600 text-white py-2 rounded-lg flex items-center justify-center gap-2">
+                        <span>📥 Take pdf</span>
+                    </button>
 
                 </div>
 

@@ -35,7 +35,7 @@ const Nav = () => {
                         <Link to={'/'}>
                             <button
                                 onClick={() => setHomeOpen(!homeOpen)}
-                                className={`flex items-center justify-between w-full p-3 rounded hover:bg-[#3758F9] hover:text-white ${getTabClasses('/')}${getTabClasses('/datewisedaybook')}`}>
+                                className={`flex items-center justify-between w-full p-3 rounded hover:bg-[#3758F9] hover:text-white ${getTabClasses('/')}${getTabClasses('/datewisedaybook')}${getTabClasses('/securityReport')}`}>
                                 <div className="flex items-center space-x-3">
                                     <FileText size={20} />
                                     <span>Reports</span>
@@ -48,6 +48,8 @@ const Nav = () => {
                             <div className="ml-8 space-y-2">
                                 <Link to="/" className={`block p-2 rounded hover:bg-[#86aeff] hover:text-white ${getTabClasses1("/")}`}>Day Book</Link>
                                 <Link to="/datewisedaybook" className={`block p-2 rounded hover:bg-[#86aeff] hover:text-white ${getTabClasses1('/datewisedaybook')}`}>Financial Summary Report</Link>
+                                <Link to="/securityReport" className={`block p-2 rounded hover:bg-[#86aeff] hover:text-white ${getTabClasses1('/securityReport')}`}>Security Report</Link>
+
                             </div>
                         )}
                     </div>
@@ -82,7 +84,7 @@ const Nav = () => {
                         <span>Cash / Bank Ledger</span>
                     </Link>
                 </nav>
-               
+
             </div>
 
             {/* Menu Button */}
