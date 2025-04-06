@@ -208,6 +208,7 @@ const Datewisedaybook = () => {
         (filteredTransactions?.reduce((sum, item) =>
             sum +
             (parseInt(item.bookingBank1, 10) || 0) +
+            (parseInt(item.bank, 10) || 0) +
             (parseInt(item.rentoutBankAmount, 10) || 0) +
             (parseInt(item.deleteBankAmount, 10) || 0) * -1 +
             (parseInt(item.returnBankAmount, 10) || 0),
@@ -397,7 +398,7 @@ const Datewisedaybook = () => {
                                                                 {parseInt(transaction.rentoutCashAmount) || parseInt(transaction.bookingCashAmount) || parseInt(transaction.returnCashAmount) || parseInt(transaction.cash) || -(parseInt(transaction.deleteCashAmount)) || 0}
                                                             </td>
                                                             <td className="border p-2">
-                                                                {parseInt(transaction.rentoutBankAmount) || parseInt(transaction.bookingBank1) || parseInt(transaction.returnBankAmount)  || parseInt(transaction.deleteBankAmount) * -1 || 0}
+                                                                {parseInt(transaction.rentoutBankAmount) || parseInt(transaction.bank) || parseInt(transaction.bookingBank1) || parseInt(transaction.returnBankAmount) || parseInt(transaction.deleteBankAmount) * -1 || 0}
                                                             </td>
                                                             <td className="border p-2">
                                                                 {parseInt(transaction.rentoutUPIAmount) || parseInt(transaction.bookingUPIAmount) || parseInt(transaction.returnUPIAmount) || parseInt(transaction.deleteUPIAmount) * -1 || 0}
