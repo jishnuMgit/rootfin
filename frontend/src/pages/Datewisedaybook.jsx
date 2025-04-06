@@ -61,6 +61,7 @@ const Datewisedaybook = () => {
         setApiUrl(updatedApiUrl);
         setApiUrl1(updatedApiUrl1);
         setApiUrl2(updatedApiUrl2);
+        alert(updatedApiUrl4)
         setApiUrl3(updatedApiUrl3)
         setApiUrl4(updatedApiUrl4)
         setApiUrl5(updatedApiUrl5)
@@ -206,16 +207,16 @@ const Datewisedaybook = () => {
     const totalBankAmount =
         (filteredTransactions?.reduce((sum, item) =>
             sum +
-            (parseInt(item.bookingBankAmount, 10) || 0) +
+            (parseInt(item.bookingBank, 10) || 0) +
             (parseInt(item.rentoutBankAmount, 10) || 0) +
             (parseInt(item.bank, 10) || 0) +
-            (parseInt(item.rentoutUPIAmount, 10) || 0) +
-            (parseInt(item.bookingUPIAmount, 10) || 0) +
             (parseInt(item.deleteBankAmount, 10) || 0) * -1 +
-            (parseInt(item.deleteUPIAmount, 10) || 0) * -1 + // Ensure negative value is applied correctly
             (parseInt(item.returnBankAmount, 10) || 0),
             0
         ) || 0);
+
+    // {parseInt(transaction.rentoutBankAmount) || transaction.bookingBank || parseInt(transaction.returnBankAmount) || parseInt(transaction.bank) || -(parseInt(transaction.deleteBankAmount) + parseInt(transaction.deleteUPIAmount)) || 0}
+
 
     const totalCash = (
         filteredTransactions?.reduce((sum, item) =>
@@ -227,7 +228,31 @@ const Datewisedaybook = () => {
             (parseInt(item.returnCashAmount, 10) || 0),
             0
         ) + (parseInt(preOpen?.cash, 10) || 0)
+
+
     );
+
+
+    const totalBankAmount1 =
+        (filteredTransactions?.reduce((sum, item) =>
+            sum +
+            (parseInt(item.rentoutUPIAmount, 10) || 0) +
+            (parseInt(item.returnUPIAmount, 10) || 0) +
+            (parseInt(item.bookingUPIAmount, 10) || 0) +
+            (parseInt(item.deleteUPIAmount, 10) || 0) * -1, // Ensure negative value is applied correctly
+            0
+        ) || 0);
+
+
+    // const totalBankAmountupi =
+    //     (filteredTransactions?.reduce((sum, item) =>
+    //         sum +
+    //         (parseInt(item.rentoutUPIAmount, 10) || 0) +
+    //         (parseInt(item.bookingUPIAmount, 10) || 0) +
+    //         (parseInt(item.returnUPIAmount, 10) || 0) +
+    //         (parseInt(item.deleteUPIAmount, 10) || 0) * -1,
+    //         0
+    //     ) || 0);
     // alert(preOpen.bank)
     return (
 
@@ -287,175 +312,120 @@ const Datewisedaybook = () => {
                     <div ref={printRef}>
                         {/* Table */}
                         <div className="bg-white p-4 shadow-md rounded-lg ">
-                            <table className="w-full border-collapse border rounded-md border-gray-300">
-                                <thead className='rounded-md'>
-                                    <tr className="bg-[#7C7C7C] rounded-md text-white">
-                                        <th className="border p-2">Date</th>
-                                        <th className="border p-2">Invoice No.</th>
-                                        <th className="border p-2">Customer Name</th>
-                                        <th className="border p-2">Category</th>
-                                        <th className="border p-2">Sub Category</th>
-                                        <th className="border p-2">Remarks</th>
-                                        <th className="border p-2">Amount</th>
-                                        <th className="border p-2">Total Transaction</th>
-                                        <th className="border p-2">Bill Value</th>
-                                        <th className="border p-2">Cash</th>
-                                        <th className="border p-2">Bank</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {/* Opening Balance */}
-                                    <tr className="bg-gray-100">
-                                        <td colSpan="9" className="border p-2 font-bold">OPENING BALANCE</td>
-                                        <td className="border p-2 font-bold">{preOpen.cash
-                                        }</td>
-                                        <td className="border p-2 font-bold">0</td>
-                                    </tr>
-
-                                    {/* Transactions */}
-                                    {filteredTransactions.length > 0 ? (
-                                        filteredTransactions.map((transaction, index) => (
-                                            <>
-                                                {transaction.Category === 'RentOut' ? (
-                                                    <>
-                                                        <tr key={`${index}-1`}>
-                                                            <td className="border p-2">{transaction.rentOutDate || transaction.bookingDate}</td>
-                                                            <td className="border p-2">{transaction.invoiceNo}</td>
-                                                            <td className="border p-2">{transaction.customerName}</td>
-                                                            <td rowSpan="2" className="border p-2">{transaction.Category}</td> {/* Merged Row */}
-                                                            <td className="border p-2">{transaction.SubCategory}</td>
-                                                            <td className="border p-2"></td>
-                                                            <td className="border p-2">{transaction.securityAmount || 0}</td>
-                                                            <td rowSpan="2" className="border p-2">
-                                                                {transaction.securityAmount + transaction.Balance}
-                                                            </td>
-                                                            <td className="border p-2" rowSpan="2">{transaction.invoiceAmount}</td>
-                                                            <td className="border p-2" rowSpan="2">{transaction.rentoutCashAmount || 0}</td>
-                                                            <td className="border p-2" rowSpan="2">{parseInt(transaction.rentoutBankAmount) + parseInt(transaction.rentoutUPIAmount) || 0}</td>
-                                                        </tr>
-
-                                                        <tr key={`${index}-2`}>
-                                                            <td className="border p-2">{transaction.rentOutDate || transaction.bookingDate}</td> {/* Repeated Row */}
-                                                            <td className="border p-2">{transaction.invoiceNo}</td>
-                                                            <td className="border p-2">{transaction.customerName}</td>
-                                                            {/* Category is skipped due to rowSpan */}
-                                                            <td className="border p-2">{transaction.SubCategory1
-                                                            }</td>
-                                                            <td className="border p-2"></td>
-                                                            <td className="border p-2">{transaction.Balance}</td>
-
-                                                            {/* <td className="border p-2">{transaction.invoiceAmount}</td> */}
-                                                            {/* <td className="border p-2">{transaction.rentoutCashAmount || transaction.bookingCashAmount || transaction.returnCashAmount || 0}</td>
-                                                            <td className="border p-2">{transaction.rentoutBankAmount || transaction.bookingBankAmount || transaction.returnBankAmount || 0}</td> */}
-                                                        </tr>
-                                                    </>
-                                                ) : (
-                                                    <tr key={index}>
-                                                        <td className="border p-2">{transaction.returnedDate || transaction.rentOutDate || transaction.cancelDate || transaction.bookingDate || transaction.date}</td>
-                                                        <td className="border p-2">{transaction.invoiceNo || transaction.locCode}</td>
-                                                        <td className="border p-2">{transaction.customerName}</td>
-                                                        <td className="border p-2">{transaction.Category || transaction.type}</td>
-                                                        <td className="border p-2">{transaction.SubCategory || transaction.category}</td>
-                                                        <td className="border p-2">{transaction.remark}</td>
-                                                        <td className="border p-2">
-
-                                                            {parseInt(transaction.returnCashAmount || 0) + parseInt(transaction.returnBankAmount || 0) ||
-                                                                parseInt(transaction.rentoutCashAmount || 0) + parseInt(transaction.rentoutBankAmount || 0) ||
-                                                                parseInt(transaction.bookingCashAmount || 0) + parseInt(transaction.bookingBankAmount || 0) + parseInt(transaction.bookingUPIAmount) ||
-                                                                parseInt(transaction.amount || -(parseInt(transaction.advanceAmount)) || 0)}                                                    </td>
-                                                        <td className="border p-2">
-                                                            {parseInt(transaction.returnCashAmount || 0) + parseInt(transaction.returnBankAmount || 0) ||
-                                                                parseInt(transaction.rentoutCashAmount || 0) + parseInt(transaction.rentoutBankAmount || 0) ||
-                                                                transaction.TotaltransactionBooking ||
-                                                                parseInt(transaction.amount || -(parseInt(transaction.deleteBankAmount) + parseInt(transaction.deleteCashAmount)) || 0)}
-                                                        </td>
-                                                        <td className="border p-2">
-                                                            {parseInt(transaction.invoiceAmount) || parseInt(transaction.amount) || 0}
-                                                        </td>
-                                                        <td className="border p-2">
-                                                            {parseInt(transaction.rentoutCashAmount) || parseInt(transaction.bookingCashAmount) || parseInt(transaction.returnCashAmount) || parseInt(transaction.cash) || -(parseInt(transaction.deleteCashAmount)) || 0}
-                                                        </td>
-                                                        <td className="border p-2">
-                                                            {parseInt(transaction.rentoutBankAmount) || transaction.bookingBank || parseInt(transaction.returnBankAmount) || parseInt(transaction.bank) || -(parseInt(transaction.deleteBankAmount) + parseInt(transaction.deleteUPIAmount)) || 0}
-                                                        </td>
-                                                    </tr>
-
-                                                )}
-                                            </>
-
-
-
-                                        ))
-                                    ) : (
-                                        <tr>
-                                            <td colSpan="11" className="text-center border p-4">No transactions found</td>
+                            <div className="bg-white p-4 shadow-md rounded-lg ">
+                                <table className="w-full border-collapse border rounded-md border-gray-300">
+                                    <thead>
+                                        <tr className="bg-[#7C7C7C] text-white">
+                                            <th className="border p-2">Date</th>
+                                            <th className="border p-2">Invoice No.</th>
+                                            <th className="border p-2">Customer Name</th>
+                                            <th className="border p-2">Category</th>
+                                            <th className="border p-2">Sub Category</th>
+                                            <th className="border p-2">Remarks</th>
+                                            <th className="border p-2">Amount</th>
+                                            <th className="border p-2">Total Transaction</th>
+                                            <th className="border p-2">Bill Value</th>
+                                            <th className="border p-2">Cash</th>
+                                            <th className="border p-2">Bank</th>
+                                            <th className="border p-2">UPI</th>
                                         </tr>
-                                    )}
-                                </tbody>
+                                    </thead>
 
-                                {/* Footer Totals */}
-                                <tfoot>
-                                    <tr className="bg-white text-center font-semibold">
-                                        <td className="border border-gray-300 px-4 py-2 text-left" colSpan="9">Total:</td>
+                                    <tbody>
+                                        {/* Opening Balance */}
+                                        <tr className="bg-gray-100 font-bold">
+                                            <td colSpan="9" className="border p-2">OPENING BALANCE</td>
+                                            <td className="border p-2">{preOpen.Closecash}</td>
+                                            <td className="border p-2">0</td>
+                                            <td className="border p-2">0</td>
+                                        </tr>
 
-                                        {/* <td className="border border-gray-300 px-4 py-2">
-                                       
-                                        {
-                                            filteredTransactions.reduce((sum, item) =>
-                                                sum +
-                                                (parseInt(item.securityAmount, 10) || 0) +
-                                                (parseInt(item.Balance, 10) || 0) +
-                                                (parseInt(item.returnCashAmount, 10) || 0) +
-                                                (parseInt(item.returnBankAmount, 10) || 0) +
-                                                (parseInt(item.rentoutCashAmount, 10) || 0) -
-                                                (parseInt(item.bookingCashAmount, 10) || 0) + 
-                                                (parseInt(item.bookingBankAmount, 10) || 0) +
-                                                (parseInt(item.amount, 10) || 0),
-                                                (parseInt(item.rentoutBankAmount, 10) || 0) +
-                                                (parseInt(item.returnBankAmount, 10) || 0),
-                                                0
-                                            )
-                                        }
+                                        {/* Transactions */}
+                                        {filteredTransactions.length > 0 ? (
+                                            filteredTransactions.map((transaction, index) => (
+                                                <>
+                                                    {transaction.Category === 'RentOut' ? (
+                                                        <>
+                                                            <tr key={`${index}-1`}>
+                                                                <td className="border p-2">{transaction.rentOutDate || transaction.bookingDate}</td>
+                                                                <td className="border p-2">{transaction.invoiceNo}</td>
+                                                                <td className="border p-2">{transaction.customerName}</td>
+                                                                <td rowSpan="2" className="border p-2">{transaction.Category}</td>
+                                                                <td className="border p-2">{transaction.SubCategory}</td>
+                                                                <td className="border p-2"></td>
+                                                                <td className="border p-2">{transaction.securityAmount || 0}</td>
+                                                                <td rowSpan="2" className="border p-2">
+                                                                    {transaction.securityAmount + transaction.Balance}
+                                                                </td>
+                                                                <td rowSpan="2" className="border p-2">{transaction.invoiceAmount}</td>
+                                                                <td rowSpan="2" className="border p-2">{transaction.rentoutCashAmount || 0}</td>
+                                                                <td rowSpan="2" className="border p-2">{parseInt(transaction.rentoutBankAmount) || 0}</td>
+                                                                <td rowSpan="2" className="border p-2">{parseInt(transaction.rentoutUPIAmount) || 0}</td>
+                                                            </tr>
+                                                            <tr key={`${index}-2`}>
+                                                                <td className="border p-2">{transaction.rentOutDate || transaction.bookingDate}</td>
+                                                                <td className="border p-2">{transaction.invoiceNo}</td>
+                                                                <td className="border p-2">{transaction.customerName}</td>
+                                                                <td className="border p-2">{transaction.SubCategory1}</td>
+                                                                <td className="border p-2"></td>
+                                                                <td className="border p-2">{transaction.Balance}</td>
+                                                            </tr>
+                                                        </>
+                                                    ) : (
+                                                        <tr key={index}>
+                                                            <td className="border p-2">{transaction.returnedDate || transaction.rentOutDate || transaction.cancelDate || transaction.bookingDate || transaction.date}</td>
+                                                            <td className="border p-2">{transaction.invoiceNo || transaction.locCode}</td>
+                                                            <td className="border p-2">{transaction.customerName}</td>
+                                                            <td className="border p-2">{transaction.Category || transaction.type}</td>
+                                                            <td className="border p-2">{transaction.SubCategory || transaction.category}</td>
+                                                            <td className="border p-2">{transaction.remark}</td>
+                                                            <td className="border p-2">
+                                                                {parseInt(transaction.returnCashAmount || 0) + parseInt(transaction.returnBankAmount || 0) ||
+                                                                    parseInt(transaction.rentoutCashAmount || 0) + parseInt(transaction.rentoutBankAmount || 0) ||
+                                                                    parseInt(transaction.bookingCashAmount || 0) + parseInt(transaction.bookingBankAmount || 0) + parseInt(transaction.bookingUPIAmount || 0) ||
+                                                                    parseInt(transaction.amount || -(parseInt(transaction.advanceAmount || 0)) || 0)}
+                                                            </td>
+                                                            <td className="border p-2">
+                                                                {parseInt(transaction.returnCashAmount || 0) + parseInt(transaction.returnBankAmount || 0) ||
+                                                                    parseInt(transaction.rentoutCashAmount || 0) + parseInt(transaction.rentoutBankAmount || 0) ||
+                                                                    transaction.TotaltransactionBooking ||
+                                                                    parseInt(transaction.amount || -(parseInt(transaction.deleteBankAmount || 0) + parseInt(transaction.deleteCashAmount || 0)) || 0)}
+                                                            </td>
+                                                            <td className="border p-2">
+                                                                {parseInt(transaction.invoiceAmount) || parseInt(transaction.amount) || 0}
+                                                            </td>
+                                                            <td className="border p-2">
+                                                                {parseInt(transaction.rentoutCashAmount) || parseInt(transaction.bookingCashAmount) || parseInt(transaction.returnCashAmount) || parseInt(transaction.cash) || -(parseInt(transaction.deleteCashAmount)) || 0}
+                                                            </td>
+                                                            <td className="border p-2">
+                                                                {parseInt(transaction.rentoutBankAmount) || parseInt(transaction.bookingBank) || parseInt(transaction.returnBankAmount) || parseInt(transaction.bank) || parseInt(transaction.deleteBankAmount) * -1 || 0}
+                                                            </td>
+                                                            <td className="border p-2">
+                                                                {parseInt(transaction.rentoutUPIAmount) || parseInt(transaction.bookingUPIAmount) || parseInt(transaction.returnUPIAmount) || parseInt(transaction.deleteUPIAmount) * -1 || 0}
+                                                            </td>
+                                                        </tr>
+                                                    )}
+                                                </>
+                                            ))
+                                        ) : (
+                                            <tr>
+                                                <td colSpan="12" className="text-center border p-4">No transactions found</td>
+                                            </tr>
+                                        )}
+                                    </tbody>
 
-                                    </td> */}
+                                    {/* Footer Totals */}
+                                    <tfoot>
+                                        <tr className="bg-white text-center font-semibold">
+                                            <td colSpan="9" className="border px-4 py-2 text-left">Total:</td>
+                                            <td className="border px-4 py-2">{totalCash}</td>
+                                            <td className="border px-4 py-2">{totalBankAmount}</td>
+                                            <td className="border px-4 py-2">{totalBankAmount1}</td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
 
-                                        {/* <td className="border border-gray-300 px-4 py-2">
-                                        {filteredTransactions.reduce((sum, item) =>
-                                            sum +
-                                            (parseInt(item.bookingCashAmount, 10) || 0) +
-                                            (parseInt(item.bookingBankAmount, 10) || 0) +
-                                            (parseInt(item.rentoutCashAmount, 10) || 0) +
-                                            (parseInt(item.rentoutBankAmount, 10) || 0) +
-                                            (parseInt(item.returnCashAmount, 10) || 0) +
-                                            (parseInt(item.returnBankAmount, 10) || 0),
-                                            0)}
-                                    </td> */}
-
-                                        {/* Total Booking Cash Amount */}
-                                        {/* <td className="border border-gray-300 px-4 py-2">
-                                        {filteredTransactions.reduce((sum, item) => sum + (parseInt(item.bookingCashAmount, 10) || 0), 0)}
-                                    </td> */}
-
-                                        {/* Total Cash (including opening balance) */}
-                                        <td className="border border-gray-300 px-4 py-2">
-                                            {
-
-                                                totalCash
-
-                                            }
-                                        </td>
-
-                                        {/* Total Bank (including opening balance) */}
-                                        <td className="border border-gray-300 px-4 py-2">
-                                            {
-
-                                                totalBankAmount
-                                            }
-                                        </td>
-                                    </tr>
-                                </tfoot>
-
-                            </table>
+                            </div>
                         </div>
                     </div>
 

@@ -18,7 +18,6 @@ const categories = [
     { value: "courier charges", label: "Courier Charges" },
     { value: "asset purchase", label: "Asset Purchase" },
     { value: "promotion_services", label: "Promotion & Services" },
-    { value: "Others", label: "Others" },
 ];
 
 const categories1 = [
