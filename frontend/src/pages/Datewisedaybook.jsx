@@ -61,7 +61,7 @@ const Datewisedaybook = () => {
         setApiUrl(updatedApiUrl);
         setApiUrl1(updatedApiUrl1);
         setApiUrl2(updatedApiUrl2);
-        alert(updatedApiUrl4)
+        // alert(updatedApiUrl4)
         setApiUrl3(updatedApiUrl3)
         setApiUrl4(updatedApiUrl4)
         setApiUrl5(updatedApiUrl5)

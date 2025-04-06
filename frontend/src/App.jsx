@@ -13,6 +13,7 @@ const App = () => {
   const location = useLocation();
   console.log(location.pathname);
 
+
   // Retrieve the current user from localStorage
   const currentuser = localStorage.getItem('rootfinuser');
 

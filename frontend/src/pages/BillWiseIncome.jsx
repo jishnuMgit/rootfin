@@ -78,7 +78,7 @@ const DayBookInc = () => {
     // alert(apiurl1)
 
     const locCode = currentusers.locCode
-    alert(apiurl1)
+    // alert(apiurl1)
 
     const printRef = useRef(null);
 
