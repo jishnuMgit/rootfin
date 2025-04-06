@@ -22,14 +22,14 @@ const DayBook = () => {
 
     const [toDate, setToDate] = useState("");
     const [apiUrl, setApiUrl] = useState("");
-
+    const currentusers = JSON.parse(localStorage.getItem("rootfinuser")); 
 
     const handleFetch = () => {
         const baseUrl = "https://rentalapi.rootments.live/api/GetBooking";
         if (!fromDate || !toDate) {
             return alert("select date ")
         } else {
-            const updatedApiUrl = `${baseUrl}/GetRentoutListDateWise?LocCode=144&DateFrom=${fromDate}&DateTo=${toDate}`;
+            const updatedApiUrl = `${baseUrl}/GetRentoutListDateWise?LocCode=${currentusers?.locCode}&DateFrom=${fromDate}&DateTo=${toDate}`;
 
             // alert(apiUrl)
             // Updating state
