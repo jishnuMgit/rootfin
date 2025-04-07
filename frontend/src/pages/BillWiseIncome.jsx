@@ -46,6 +46,8 @@ const denominations = [
 const DayBookInc = () => {
 
     const [preOpen, setPreOpen] = useState([])
+    const [preOpen1, setPreOpen1] = useState([])
+
     const date = new Date();
     const previousDate = new Date(date);
     previousDate.setDate(date.getDate() - 1);
@@ -75,6 +77,8 @@ const DayBookInc = () => {
     const apiUrl4 = `${baseUrl.baseUrl}user/Getpayment?LocCode=${currentusers.locCode}&DateFrom=${currentDate}&DateTo=${currentDate}`;
     const apiUrl5 = `${baseUrl.baseUrl}user/saveCashBank`
     const apiUrl6 = `${baseUrl.baseUrl}user/getsaveCashBank?locCode=${currentusers.locCode}&date=${formattedDate}`
+    const apiUrl7 = `${baseUrl.baseUrl}user/getsaveCashBank?locCode=${currentusers.locCode}&date=${currentDate}`
+
     // alert(apiurl1)
 
     const locCode = currentusers.locCode
@@ -263,10 +267,7 @@ const DayBookInc = () => {
     // console.log(savedData);
 
     const CreateCashBank = async () => {
-        if (savedData.totalAmount !== savedData.totalCash) {
-            alert("Cash is missing");
-            return;
-        }
+       
         try {
             const response = await fetch(apiUrl5, {
                 method: 'POST',
@@ -284,6 +285,7 @@ const DayBookInc = () => {
 
             const data = await response.json();
             console.log("Data saved successfully:", data);
+            window.location.reload();
             alert("Data saved successfully");
         } catch (error) {
             console.error("Error saving data:", error);
@@ -313,8 +315,31 @@ const DayBookInc = () => {
             console.error("Error saving data:", error);
         }
     };
+
+    const takeCreateCashBank = async () => {
+        try {
+            const response = await fetch(apiUrl7, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+            // alert(apiUrl6)
+
+            if (!response.ok) {
+                throw new Error('Error saving data');
+            }
+
+            const data = await response.json();
+            console.log("Data saved successfully:", data);
+            setPreOpen1(data?.data)
+        } catch (error) {
+            console.error("Error saving data:", error);
+        }
+    };
     useEffect(() => {
         GetCreateCashBank()
+        takeCreateCashBank()
     }, [])
 
     return (
@@ -496,7 +521,7 @@ const DayBookInc = () => {
 
                                         <div className="flex justify-between mt-4 text-lg font-semibold">
                                             <span>TOTAL</span>
-                                            <span>{totalAmount}</span>
+                                            <span>{preOpen1?.Closecash || totalAmount}</span>
                                         </div>
                                     </div>
                                     <div className='!w-[500px] mt-[300px]'>
@@ -507,17 +532,19 @@ const DayBookInc = () => {
                                             </div>
                                             <div className="flex justify-between">
                                                 <span>Physical Cash</span>
-                                                <span className="font-bold">{totalAmount}</span>
+                                                <span className="font-bold">{preOpen1?.Closecash ? preOpen1?.Closecash : totalAmount}</span>
                                             </div>
                                             <div className="flex justify-between text-red-600">
                                                 <span>Differences</span>
-                                                <span className="font-bold">{(totalCash - totalAmount) * -1}</span>
+                                                <span className="font-bold">{preOpen1?.Closecash ? (totalCash - preOpen1?.Closecash) * -1 : (totalCash - totalAmount) * -1}</span>
                                             </div>
                                         </div>
                                         <div className='flex gap-2'>
-                                            <button onClick={CreateCashBank} className="mt-6 w-full cursor-pointer bg-yellow-400 text-white py-2 rounded-lg flex items-center justify-center gap-2">
+                                            {
+                                                !preOpen1?.Closecash && <button onClick={CreateCashBank} className="mt-6 w-full cursor-pointer bg-yellow-400 text-white py-2 rounded-lg flex items-center justify-center gap-2">
                                                 <span>💾 save </span>
                                             </button>
+                                            }
                                             <button onClick={handlePrint} className="mt-6 w-full cursor-pointer bg-blue-600 text-white py-2 rounded-lg flex items-center justify-center gap-2">
                                                 <span>📥 Take pdf</span>
                                             </button>
