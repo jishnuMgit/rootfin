@@ -50,18 +50,25 @@ const Datewisedaybook = () => {
     const handleFetch = () => {
         setPreOpen([])
 
+        const fromDates = new Date(fromDate); // or use new Date() for current date
+
+        // Subtract 1 day (24 hours)
+        const previousDay = new Date(fromDates);
+        previousDay.setDate(previousDay.getDate() - 1);
+        const formattedDate = previousDay.toISOString().split('T')[0];
+
         const baseUrl1 = "https://rentalapi.rootments.live/api/GetBooking";
         const updatedApiUrl = `${baseUrl1}/GetBookingList?LocCode=${currentusers.locCode}&DateFrom=${fromDate}&DateTo=${toDate}`;
         const updatedApiUrl1 = `${baseUrl1}/GetRentoutList?LocCode=${currentusers.locCode}&DateFrom=${fromDate}&DateTo=${toDate}`;
         const updatedApiUrl2 = `${baseUrl1}/GetReturnList?LocCode=${currentusers.locCode}&DateFrom=${fromDate}&DateTo=${toDate}`;
         const updatedApiUrl3 = `${baseUrl.baseUrl}user/Getpayment?LocCode=${currentusers.locCode}&DateFrom=${fromDate}&DateTo=${toDate}`;
         const updatedApiUrl4 = `${baseUrl1}/GetDeleteList?LocCode=${currentusers.locCode}&DateFrom=${fromDate}&DateTo=${toDate}`
-        const updatedApiUrl5 = `${baseUrl.baseUrl}user/getsaveCashBank?locCode=${currentusers.locCode}&date=${fromDate}`
+        const updatedApiUrl5 = `${baseUrl.baseUrl}user/getsaveCashBank?locCode=${currentusers.locCode}&date=${formattedDate}`
 
         setApiUrl(updatedApiUrl);
         setApiUrl1(updatedApiUrl1);
         setApiUrl2(updatedApiUrl2);
-        // alert(updatedApiUrl4)
+        alert(updatedApiUrl5)
         setApiUrl3(updatedApiUrl3)
         setApiUrl4(updatedApiUrl4)
         setApiUrl5(updatedApiUrl5)
