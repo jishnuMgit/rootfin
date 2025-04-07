@@ -267,7 +267,7 @@ const DayBookInc = () => {
     // console.log(savedData);
 
     const CreateCashBank = async () => {
-       
+
         try {
             const response = await fetch(apiUrl5, {
                 method: 'POST',
@@ -521,7 +521,7 @@ const DayBookInc = () => {
 
                                         <div className="flex justify-between mt-4 text-lg font-semibold">
                                             <span>TOTAL</span>
-                                            <span>{preOpen1?.Closecash || totalAmount}</span>
+                                            <span>{preOpen1?.cash || totalAmount}</span>
                                         </div>
                                     </div>
                                     <div className='!w-[500px] mt-[300px]'>
@@ -532,18 +532,18 @@ const DayBookInc = () => {
                                             </div>
                                             <div className="flex justify-between">
                                                 <span>Physical Cash</span>
-                                                <span className="font-bold">{preOpen1?.Closecash ? preOpen1?.Closecash : totalAmount}</span>
+                                                <span className="font-bold">{preOpen1?.Closecash ? preOpen1?.cash : totalAmount}</span>
                                             </div>
                                             <div className="flex justify-between text-red-600">
                                                 <span>Differences</span>
-                                                <span className="font-bold">{preOpen1?.Closecash ? (totalCash - preOpen1?.Closecash) * -1 : (totalCash - totalAmount) * -1}</span>
+                                                <span className="font-bold">{preOpen1?.cash ? (totalCash - preOpen1?.cash) * -1 : (totalCash - totalAmount) * -1}</span>
                                             </div>
                                         </div>
                                         <div className='flex gap-2'>
                                             {
-                                                !preOpen1?.Closecash && <button onClick={CreateCashBank} className="mt-6 w-full cursor-pointer bg-yellow-400 text-white py-2 rounded-lg flex items-center justify-center gap-2">
-                                                <span>💾 save </span>
-                                            </button>
+                                                !preOpen1?.cash && <button onClick={CreateCashBank} className="mt-6 w-full cursor-pointer bg-yellow-400 text-white py-2 rounded-lg flex items-center justify-center gap-2">
+                                                    <span>💾 save </span>
+                                                </button>
                                             }
                                             <button onClick={handlePrint} className="mt-6 w-full cursor-pointer bg-blue-600 text-white py-2 rounded-lg flex items-center justify-center gap-2">
                                                 <span>📥 Take pdf</span>

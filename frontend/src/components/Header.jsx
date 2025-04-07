@@ -60,6 +60,7 @@ const Header = (prop) => {
 
             localStorage.setItem("rootfinuser", JSON.stringify(updatedUser));
             setCurrentUser(updatedUser);
+            window.location.reload()
         }
     };
 
