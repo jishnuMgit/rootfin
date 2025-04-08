@@ -9,6 +9,7 @@ import Nav from "./components/Nav.jsx";
 import Login from "./pages/Login.jsx";
 import Security from "./pages/Security.jsx";
 import CloseReport from "./pages/CloseReport.jsx";
+import Revenuereport from "./pages/Revenuereport.jsx";
 
 const App = () => {
   const location = useLocation();
@@ -35,6 +36,7 @@ const App = () => {
           <Route path="/CashBankLedger" element={currentuser ? <SecurityPending /> : <Navigate to="/login" />} />
           <Route path="/securityReport" element={currentuser ? <Security /> : <Navigate to='/login' />} />
           <Route path="/CloseReport" element={currentuser?.power === 'admin' ? <CloseReport /> : <Navigate to='/' />} />
+          <Route path="/Revenuereport" element={currentuser ? <Revenuereport /> : <Navigate to="/login" />} />
 
         </Routes>
       </div>

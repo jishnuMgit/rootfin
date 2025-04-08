@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { FileText, ChevronDown, ShoppingBag, LineChart, DollarSign ,FolderClosed  } from "lucide-react";
+import { FileText, ChevronDown, ShoppingBag, LineChart, DollarSign, FolderClosed } from "lucide-react";
 const Nav = () => {
     const location = useLocation();
     const currentuser = JSON.parse(localStorage.getItem("rootfinuser")); // Convert back to an object
@@ -36,7 +36,7 @@ const Nav = () => {
                         <Link to={'/'}>
                             <button
                                 onClick={() => setHomeOpen(!homeOpen)}
-                                className={`flex items-center justify-between w-full p-3 rounded hover:bg-[#3758F9] hover:text-white ${getTabClasses('/')}${getTabClasses('/datewisedaybook')}${getTabClasses('/securityReport')}`}>
+                                className={`flex items-center justify-between w-full p-3 rounded hover:bg-[#3758F9] hover:text-white ${getTabClasses('/')}${getTabClasses('/datewisedaybook')}${getTabClasses('/securityReport')}${getTabClasses('/Revenuereport')}`}>
                                 <div className="flex items-center space-x-3">
                                     <FileText size={20} />
                                     <span>Reports</span>
@@ -50,6 +50,7 @@ const Nav = () => {
                                 <Link to="/" className={`block p-2 rounded hover:bg-[#86aeff] hover:text-white ${getTabClasses1("/")}`}>Day Book</Link>
                                 <Link to="/datewisedaybook" className={`block p-2 rounded hover:bg-[#86aeff] hover:text-white ${getTabClasses1('/datewisedaybook')}`}>Financial Summary Report</Link>
                                 <Link to="/securityReport" className={`block p-2 rounded hover:bg-[#86aeff] hover:text-white ${getTabClasses1('/securityReport')}`}>Security Report</Link>
+                                <Link to="/Revenuereport" className={`block p-2 rounded hover:bg-[#86aeff] hover:text-white ${getTabClasses1('/Revenuereport')}`}>Revenue Report</Link>
 
                             </div>
                         )}
@@ -87,7 +88,7 @@ const Nav = () => {
 
                     {
                         currentuser.power === 'admin' && <Link to="/CloseReport" className={`flex items-center space-x-3 p-3 rounded hover:bg-[#3758F9] hover:text-white ${getTabClasses1("/CloseReport")}`}>
-                            <FolderClosed  size={20} />
+                            <FolderClosed size={20} />
                             <span>Close  Report</span>
                         </Link>
 
