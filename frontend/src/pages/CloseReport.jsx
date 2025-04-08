@@ -1,5 +1,6 @@
 import { useRef, useState } from 'react';
 import Headers from '../components/Header';
+import baseUrl from '../api/api';
 
 const CloseReport = () => {
   const AllLoation = [
@@ -42,7 +43,7 @@ const CloseReport = () => {
     if (!fromDate) return alert("Please select a date first.");
 
     const formattedDate = formatDate(fromDate);
-    const updatedApiUrl = `http://localhost:7000/user/AdminColseView?date=${formattedDate}&role=${currentuser?.power}`;
+    const updatedApiUrl = `${baseUrl?.baseUrl}user/AdminColseView?date=${formattedDate}&role=${currentuser?.power}`;
 
     try {
       const response = await fetch(updatedApiUrl);
