@@ -25,6 +25,7 @@ const Booking = () => {
 
     const [toDate, setToDate] = useState("");
     const [apiUrl, setApiUrl] = useState("");
+    const currentusers = JSON.parse(localStorage.getItem("rootfinuser"));
 
 
     const handleFetch = () => {
@@ -32,7 +33,7 @@ const Booking = () => {
         if (!fromDate || !toDate) {
             return alert("select date ")
         } else {
-            const updatedApiUrl = `${baseUrl}/GetBookingListDateWise?LocCode=144&DateFrom=${fromDate}&DateTo=${toDate}`;
+            const updatedApiUrl = `${baseUrl}/GetBookingListDateWise?LocCode=${currentusers.locCode}&DateFrom=${fromDate}&DateTo=${toDate}`;
 
             // alert(apiUrl)
             // Updating state
