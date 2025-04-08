@@ -237,7 +237,7 @@ const Revenuereport = () => {
     return (
 
         <div>
-            <Headers title={"Security Report"} />
+            <Headers title={"Revenue Report"} />
             <div className='ml-[240px]'>
                 <div className="p-6 bg-gray-100 min-h-screen">
                     {/* Dropdowns */}
