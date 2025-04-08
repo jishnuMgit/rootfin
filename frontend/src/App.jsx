@@ -34,7 +34,7 @@ const App = () => {
           <Route path="/Income&Expenses" element={currentuser ? <SecurityReturn /> : <Navigate to="/login" />} />
           <Route path="/CashBankLedger" element={currentuser ? <SecurityPending /> : <Navigate to="/login" />} />
           <Route path="/securityReport" element={currentuser ? <Security /> : <Navigate to='/login' />} />
-          <Route path="/CloseReport" element={currentuser.power === 'admin' ? <CloseReport /> : <Navigate to='/' />} />
+          <Route path="/CloseReport" element={currentuser?.power === 'admin' ? <CloseReport /> : <Navigate to='/' />} />
 
         </Routes>
       </div>
