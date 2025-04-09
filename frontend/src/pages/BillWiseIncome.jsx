@@ -47,6 +47,8 @@ const DayBookInc = () => {
 
     const [preOpen, setPreOpen] = useState([])
     const [preOpen1, setPreOpen1] = useState([])
+    const [loading, setLoading] = useState(false)
+
 
     const date = new Date();
     const previousDate = new Date(date);
@@ -267,7 +269,7 @@ const DayBookInc = () => {
     // console.log(savedData);
 
     const CreateCashBank = async () => {
-
+        setLoading(true)
         try {
             const response = await fetch(apiUrl5, {
                 method: 'POST',
@@ -285,11 +287,16 @@ const DayBookInc = () => {
 
             const data = await response.json();
             console.log("Data saved successfully:", data);
-            window.location.reload();
+
             alert("Data saved successfully");
+            setLoading(false)
+            window.location.reload();
+
         } catch (error) {
             console.error("Error saving data:", error);
             alert("An unexpected error occurred.");
+            setLoading(false)
+
         }
     };
 
@@ -541,7 +548,9 @@ const DayBookInc = () => {
                                         </div>
                                         <div className='flex gap-2'>
                                             {
-                                                !preOpen1?.cash && <button onClick={CreateCashBank} className="mt-6 w-full cursor-pointer bg-yellow-400 text-white py-2 rounded-lg flex items-center justify-center gap-2">
+                                                loading ? !preOpen1?.cash && <button className="mt-6 w-full cursor-pointer bg-yellow-400 text-white py-2 rounded-lg flex items-center justify-center gap-2">
+                                                    <span>🔃 Loading...! </span>
+                                                </button> : !preOpen1?.cash && <button onClick={CreateCashBank} className="mt-6 w-full cursor-pointer bg-yellow-400 text-white py-2 rounded-lg flex items-center justify-center gap-2">
                                                     <span>💾 save </span>
                                                 </button>
                                             }
