@@ -165,7 +165,7 @@ const CloseReport = () => {
                     ))
                   ) : (
                     <tr>
-                      <td colSpan="7" className="text-center border p-4">
+                      <td colSpan="9" className="text-center border p-4">
                         {!fromDate ? "Select date first" : "No transactions found"}
                       </td>
                     </tr>
