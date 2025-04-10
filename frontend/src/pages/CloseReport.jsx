@@ -133,25 +133,31 @@ const CloseReport = () => {
               <table className="w-full border-collapse border rounded-md border-gray-300">
                 <thead>
                   <tr className="bg-[#7C7C7C] text-white">
+                    <th className="border p-2">No.of</th>
                     <th className="border p-2">Date</th>
                     <th className="border p-2">Store</th>
                     <th className="border p-2">locCode</th>
                     <th className="border p-2">Bank</th>
                     <th className="border p-2">Cash</th>
                     <th className="border p-2">Close Cash</th>
+                    <th className="border p-2">difference</th>
                     <th className="border p-2">Match</th>
                   </tr>
                 </thead>
                 <tbody>
                   {filteredTransactions.length > 0 ? (
                     filteredTransactions.map((transaction, index) => (
+
                       <tr key={index}>
+                        <td className="border p-2">{index + 1}</td>
+
                         <td className="border p-2">{transaction.date.split('T')[0]}</td>
                         <td className="border p-2">{transaction.storeName}</td>
                         <td className="border p-2">{transaction.locCode}</td>
                         <td className="border p-2">{transaction.bank}</td>
                         <td className="border p-2">{transaction.cash}</td>
                         <td className="border p-2">{transaction.Closecash}</td>
+                        <td className='border p-2'>{Math.abs(transaction.cash - transaction.Closecash)}</td>
                         <td className={`border p-2 ${transaction.match === 'Match' ? 'text-green-600 font-bold' : 'text-red-600 font-bold'}`}>
                           {transaction.match}
                         </td>

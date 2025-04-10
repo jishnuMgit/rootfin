@@ -27,6 +27,7 @@ const subCategories = [
     { value: "security Refund", label: "Security Refund" },
     { value: "compensation", label: "Compensation" },
     { value: "petty expenses", label: "petty expenses" },
+    { value: "shoe sales", label: "shoe sales" }
 ];
 
 
