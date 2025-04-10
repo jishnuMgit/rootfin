@@ -5,9 +5,9 @@ import baseUrl from '../api/api';
 const CloseReport = () => {
   const AllLoation = [
     { "locName": "Z-Edapally1", "locCode": "144" },
-    { "locName": "Warehouse", "locCode": "858" },
+    // { "locName": "Warehouse", "locCode": "858" },
     { "locName": "G-Edappally", "locCode": "702" },
-    { "locName": "HEAD OFFICE01", "locCode": "759" },
+    // { "locName": "HEAD OFFICE01", "locCode": "759" },
     { "locName": "SG-Trivandrum", "locCode": "700" },
     { "locName": "Z- Edappal", "locCode": "100" },
     { "locName": "Z.Perinthalmanna", "locCode": "133" },
@@ -72,6 +72,12 @@ const CloseReport = () => {
     if (filter === "All") return true;
     return transaction.match === filter;
   });
+
+  const NotClosingBranch = AllLoation.filter((loc) => {
+    return !filteredTransactions.some((txn) => txn.storeName === loc.locName);
+  });
+
+
 
   const handlePrint = () => {
     const printContent = printRef.current.innerHTML;
@@ -173,7 +179,44 @@ const CloseReport = () => {
                 </tbody>
               </table>
             </div>
+
           </div>
+
+          <h1 className='mt-10 mb-10 ml-10 text-xl font-bold text-red-500'>
+            They haven’t closed their store balance          </h1>
+
+          <table className="w-full border-collapse border rounded-md border-red-400">
+            <thead>
+              <tr className="bg-[#7C7C7C] text-white">
+                <th className="border border-red-400 p-2">No.of</th>
+                <th className="border border-red-400 p-2">Date</th>
+                <th className="border border-red-400 p-2">Store</th>
+                <th className="border border-red-400 p-2">locCode</th>
+
+              </tr>
+            </thead>
+            <tbody>
+              {NotClosingBranch.length > 0 ? (
+                NotClosingBranch.map((transaction, index) => (
+
+                  <tr key={index}>
+                    <td className="border border-red-400 p-2">{index + 1}</td>
+
+                    <td className="border border-red-400 p-2">{fromDate}</td>
+                    <td className="border border-red-400 p-2">{transaction.locName}</td>
+                    <td className="border border-red-400 p-2">{transaction.locCode}</td>
+
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan="9" className="text-center border border-red-400 p-4">
+                    {!fromDate ? "Select date first" : "No transactions found"}
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
 
           {/* Print Button */}
           <button
