@@ -555,9 +555,9 @@ const DayBookInc = () => {
                                                     <span>💾 save </span>
                                                 </button>
                                             }
-                                            <button onClick={handlePrint} className="mt-6 w-full cursor-pointer bg-blue-600 text-white py-2 rounded-lg flex items-center justify-center gap-2">
+                                            {!loading ? preOpen1?.cash && <button onClick={handlePrint} className="mt-6 w-full cursor-pointer bg-blue-600 text-white py-2 rounded-lg flex items-center justify-center gap-2">
                                                 <span>📥 Take pdf</span>
-                                            </button>
+                                            </button> : ""}
                                         </div>
 
                                     </div>
