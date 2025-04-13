@@ -51,11 +51,12 @@ const DayBookInc = () => {
     const [loading, setLoading] = useState(false)
 
 
-    const date = new Date();
-    const previousDate = new Date(date);
-    previousDate.setDate(date.getDate() - 1);
-    const TodayDate = `${String(date.getDate()).padStart(2, '0')}-${String(date.getMonth() + 1).padStart(2, '0')}-${date.getFullYear()}`;
+    const date1 = new Date();
+    const previousDate = new Date(date1);
+    previousDate.setDate(date1.getDate() - 1);
+    const TodayDate = `${String(date1.getDate()).padStart(2, '0')}-${String(date1.getMonth() + 1).padStart(2, '0')}-${date1.getFullYear()}`;
     const previousDate1 = `${String(previousDate.getDate()).padStart(2, '0')}-${String(previousDate.getMonth() + 1).padStart(2, '0')}-${previousDate.getFullYear()}`;
+    const date = TodayDate;
 
     // alert(TodayDate);
     const currentusers = JSON.parse(localStorage.getItem("rootfinuser")); // Convert back to an object
@@ -84,7 +85,9 @@ const DayBookInc = () => {
 
     // alert(apiurl1)
 
-    const locCode = currentusers.locCode
+    const locCode = currentusers?.locCode
+    const email = currentusers?.email
+
     // alert(apiurl1)
 
     const printRef = useRef(null);
@@ -258,10 +261,10 @@ const DayBookInc = () => {
             0
         ) + (parseInt(preOpen?.Closecash, 10) || 0)
     );
-
     const savedData = {
-        TodayDate,
+        date,
         locCode,
+        email,
         totalCash,
         totalAmount,
         totalBankAmount
@@ -270,6 +273,13 @@ const DayBookInc = () => {
     // console.log(savedData);
 
     const CreateCashBank = async () => {
+
+
+
+        // alert(savedData.totalAmount)
+        if (savedData.totalAmount === 0) {
+            return alert('You have entered 0 as cash. If cash is missing, please inform the Rootments office.')
+        }
         setLoading(true)
         try {
             const response = await fetch(apiUrl5, {
@@ -281,9 +291,11 @@ const DayBookInc = () => {
             });
 
             if (response.status === 401) {
+                setLoading(false)
                 return alert("Error: Data already saved for today.");
             } else if (!response.ok) {
-                return alert("Error: Failed to save data.");
+                setLoading(false)
+                return alert(JSON.stringify(response), null, 2);
             }
 
             const data = await response.json();
