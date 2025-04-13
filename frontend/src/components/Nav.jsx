@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { FileText, ChevronDown, ShoppingBag, LineChart, DollarSign, FolderClosed } from "lucide-react";
+import { FileText, ChevronDown, ShoppingBag, LineChart, DollarSign, FolderClosed,  Notebook } from "lucide-react";
 const Nav = () => {
     const location = useLocation();
     const currentuser = JSON.parse(localStorage.getItem("rootfinuser")); // Convert back to an object
@@ -90,6 +90,13 @@ const Nav = () => {
                         currentuser.power === 'admin' && <Link to="/CloseReport" className={`flex items-center space-x-3 p-3 rounded hover:bg-[#3758F9] hover:text-white ${getTabClasses1("/CloseReport")}`}>
                             <FolderClosed size={20} />
                             <span>Close  Report</span>
+                        </Link>
+
+                    }
+                     {
+                        currentuser.power === 'admin' && <Link to="/AdminClose" className={`flex items-center space-x-3 p-3 rounded hover:bg-[#3758F9] hover:text-white ${getTabClasses1("/AdminClose")}`}>
+                            <Notebook size={20} />
+                            <span>Admin Close</span>
                         </Link>
 
                     }
