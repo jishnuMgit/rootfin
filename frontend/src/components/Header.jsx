@@ -1,5 +1,5 @@
 import { IoPersonCircleOutline } from "react-icons/io5";
-import Rootments from '../../public/Rootments.jpg';
+import Rootments from '../assets/Rootments.jpg';
 import { useState, useEffect } from "react";
 
 const Header = (prop) => {

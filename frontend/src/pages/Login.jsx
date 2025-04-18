@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { FaEye, FaEyeSlash } from "react-icons/fa";
-import img12 from '../../public/image.png';
+// import img12 from '../../public/image.png';
 import baseUrl from '../api/api';
 import { useNavigate } from 'react-router-dom';
 
@@ -112,7 +112,7 @@ const Login = () => {
 
       {/* Right Side - Image */}
       <div className="hidden md:flex w-1/2 bg-[#016E5B] justify-center items-center">
-        <img src={img12} width="500px" alt="Login Illustration" />
+        <img src='/image.png' width="500px" alt="Login Illustration" />
       </div>
     </div>
   );
