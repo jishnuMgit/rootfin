@@ -1,9 +1,28 @@
+import { CSVLink } from "react-csv";
 import Headers from '../components/Header.jsx';
 import React, { useEffect, useMemo, useState } from "react";
 import Select from "react-select";
 import useFetch from '../hooks/useFetch.jsx';
 import baseUrl from '../api/api.js';
 import { useRef } from "react";
+
+
+
+const headers = [
+    { label: "Date", key: "date", },
+    { label: "Invoice No", key: "invoiceNo" },
+    { label: "Customer Name", key: "customerName" },
+    { label: "Category", key: "Category" },
+    { label: "Sub Category", key: "SubCategory" },
+    { label: "Balance Payable", key: "SubCategory1" },
+    { label: "Remarks", key: "remarks" },
+    { label: "Amount", key: "amount" },
+    { label: "Total Transaction", key: "totalTransaction" },
+    { label: "Bill Value", key: "billValue" },
+    { label: "Cash", key: "cash" },
+    { label: "Bank", key: "bank" },
+    { label: "UPI", key: "upi" },
+];
 
 const categories = [
     { value: "all", label: "All" },
@@ -129,43 +148,76 @@ const DayBookInc = () => {
 
     const bookingTransactions = (data?.dataSet?.data || []).map(transaction => ({
         ...transaction,
+        date: transaction.bookingDate,
         bookingCashAmount: parseInt(transaction.bookingCashAmount, 10) || 0,
         bookingBankAmount: parseInt(transaction.bookingBankAmount, 10) || 0,
         invoiceAmount: parseInt(transaction.invoiceAmount, 10) || 0,
         bookingBank1: parseInt(transaction.bookingBankAmount),
         TotaltransactionBooking: parseInt(transaction.bookingBankAmount) + parseInt(transaction.bookingUPIAmount) + parseInt(transaction.bookingCashAmount),
         Category: "Booking",
-        SubCategory: "Advance"
+        SubCategory: "Advance",
+        amount: transaction.TotaltransactionBooking
     }));
     const canCelTransactions = (data3?.dataSet?.data || []).map(transaction => ({
         ...transaction,
+        date: transaction.cancelDate,
         Category: "Cancel",
-        SubCategory: "cancellation Refund"
-
+        SubCategory: "cancellation Refund",
+        billValue: transaction.invoiceAmount,
+        amount: parseInt(transaction.deleteUPIAmount) + parseInt(transaction.deleteCashAmount) + parseInt(transaction.deleteBankAmount),
+        totalTransaction: parseInt(transaction.deleteUPIAmount) + parseInt(transaction.deleteCashAmount) + parseInt(transaction.deleteBankAmount),
+        cash: parseInt(transaction.deleteCashAmount),
+        bank: parseInt(transaction.deleteBankAmount),
+        upi: parseInt(transaction.deleteUPIAmount),
 
     }));
     const Transactionsall = (data4?.data || []).map(transaction => ({
         ...transaction,
         locCode: currentusers.locCode,
-        date: transaction.date.split("T")[0] // Correctly extract only the date
-    }));
-    const rentOutTransactions = (data1?.dataSet?.data || []).map(transaction => ({
-        ...transaction,
-        bookingCashAmount: parseInt(transaction.bookingCashAmount, 10) || 0,
-        bookingBankAmount: parseInt(transaction.bookingBankAmount, 10) || 0,
-        invoiceAmount: parseInt(transaction.invoiceAmount, 10) || 0,
-        securityAmount: parseInt(transaction.securityAmount, 10) || 0,
-        advanceAmount: parseInt(transaction.advanceAmount, 10) || 0,
-        Balance: (parseInt(transaction.invoiceAmount ?? 0, 10) - parseInt(transaction.advanceAmount ?? 0, 10)) || 0,
-        rentoutUPIAmount: parseInt(transaction.rentoutUPIAmount),
-        Category: "RentOut",
-        SubCategory: "Security",
-        SubCategory1: "Balance Payable"
+        date: transaction.date.split("T")[0],// Correctly extract only the date
+        Category: transaction.type,
+        subCategory: transaction.category,
+        billValue: transaction.amount,
+
+
 
     }));
+    const rentOutTransactions = (data1?.dataSet?.data || []).map(transaction => {
+        const rentoutCashAmount = parseInt(transaction?.rentoutCashAmount ?? 0, 10);
+        const rentoutBankAmount = parseInt(transaction?.rentoutBankAmount ?? 0, 10);
+        const invoiceAmount = parseInt(transaction?.invoiceAmount ?? 0, 10);
+        const advanceAmount = parseInt(transaction?.advanceAmount ?? 0, 10);
+        const rentoutUPIAmount = parseInt(transaction?.rentoutUPIAmount ?? 0, 10);
+        const securityAmount = parseInt(transaction?.securityAmount ?? 0, 10);
+
+        return {
+            ...transaction,
+            date: transaction?.rentOutDate ?? "",
+            rentoutCashAmount,
+            rentoutBankAmount,
+            invoiceAmount,
+            securityAmount,
+            advanceAmount,
+            Balance: invoiceAmount - advanceAmount,
+            rentoutUPIAmount,
+            Category: "RentOut",
+            SubCategory: "Security",
+            SubCategory1: "Balance Payable",
+            totalTransaction: rentoutCashAmount + rentoutBankAmount + rentoutUPIAmount,
+            cash: rentoutCashAmount,
+            bank: rentoutBankAmount,
+            upi: rentoutUPIAmount,
+            amount: rentoutCashAmount + rentoutBankAmount + rentoutUPIAmount,
+        };
+    });
+
+
+
+    //return
 
     const returnOutTransactions = (data2?.dataSet?.data || []).map(transaction => ({
         ...transaction,
+        date: transaction.returnedDate,
         returnBankAmount: -(parseInt(transaction.returnBankAmount, 10) || 0),
         returnCashAmount: -(parseInt(transaction.returnCashAmount, 10) || 0),
         invoiceAmount: parseInt(transaction.invoiceAmount, 10) || 0,
@@ -431,7 +483,7 @@ const DayBookInc = () => {
                                                         {transaction.Category === 'RentOut' ? (
                                                             <>
                                                                 <tr key={`${index}-1`}>
-                                                                    <td className="border p-2">{transaction.rentOutDate || transaction.bookingDate}</td>
+                                                                    <td className="border p-2">{transaction.date}</td>
                                                                     <td className="border p-2">{transaction.invoiceNo}</td>
                                                                     <td className="border p-2">{transaction.customerName}</td>
                                                                     <td rowSpan="2" className="border p-2">{transaction.Category}</td>
@@ -457,7 +509,7 @@ const DayBookInc = () => {
                                                             </>
                                                         ) : (
                                                             <tr key={index}>
-                                                                <td className="border p-2">{transaction.returnedDate || transaction.rentOutDate || transaction.cancelDate || transaction.bookingDate || transaction.date}</td>
+                                                                <td className="border p-2">{transaction.date}</td>
                                                                 <td className="border p-2">{transaction.invoiceNo || transaction.locCode}</td>
                                                                 <td className="border p-2">{transaction.customerName}</td>
                                                                 <td className="border p-2">{transaction.Category || transaction.type}</td>
@@ -570,6 +622,9 @@ const DayBookInc = () => {
                                             {!loading ? preOpen1?.cash && <button onClick={handlePrint} className="mt-6 w-full cursor-pointer bg-blue-600 text-white py-2 rounded-lg flex items-center justify-center gap-2">
                                                 <span>📥 Take pdf</span>
                                             </button> : ""}
+                                            <CSVLink data={filteredTransactions} headers={headers} filename={"report.csv"}>
+                                                <button className="bg-blue-500 text-white p-2 rounded">Export CSV</button>
+                                            </CSVLink>
                                         </div>
 
                                     </div>
