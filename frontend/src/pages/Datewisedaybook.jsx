@@ -3,6 +3,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import Select from "react-select";
 import useFetch from '../hooks/useFetch.jsx';
 import baseUrl from '../api/api.js';
+import { CSVLink } from 'react-csv';
 
 const categories = [
     { value: "all", label: "All" },
@@ -15,6 +16,22 @@ const categories = [
     { value: "income", label: "income" },
     { value: "expense", label: "Expense" },
     { value: "money transfer", label: "Cash to Bank" },
+];
+
+const headers = [
+    { label: "Date", key: "date", },
+    { label: "Invoice No", key: "invoiceNo" },
+    { label: "Customer Name", key: "customerName" },
+    { label: "Category", key: "Category" },
+    { label: "Sub Category", key: "SubCategory" },
+    { label: "Balance Payable", key: "SubCategory1" },
+    { label: "Remarks", key: "remarks" },
+    { label: "Amount", key: "amount" },
+    { label: "Total Transaction", key: "totalTransaction" },
+    { label: "Bill Value", key: "billValue" },
+    { label: "Cash", key: "cash" },
+    { label: "Bank", key: "bank" },
+    { label: "UPI", key: "upi" },
 ];
 
 const subCategories = [
@@ -70,7 +87,7 @@ const Datewisedaybook = () => {
         setApiUrl(updatedApiUrl);
         setApiUrl1(updatedApiUrl1);
         setApiUrl2(updatedApiUrl2);
-        // alert(updatedApiUrl5)
+        alert(updatedApiUrl3)
         setApiUrl3(updatedApiUrl3)
         setApiUrl4(updatedApiUrl4)
         setApiUrl5(updatedApiUrl5)
@@ -128,71 +145,136 @@ const Datewisedaybook = () => {
     // Memoizing fetch options
     const fetchOptions = useMemo(() => ({}), []);
 
-    const { data } = useFetch(apiUrl, fetchOptions);
-    const { data: data1 } = useFetch(apiUrl1, fetchOptions);
-    const { data: data2 } = useFetch(apiUrl2, fetchOptions);
-    const { data: data3 } = useFetch(apiUrl3, fetchOptions);
-    const { data: data4 } = useFetch(apiUrl4, fetchOptions);
+    const { data } = useFetch(apiUrl, fetchOptions);//booking
+    const { data: data1 } = useFetch(apiUrl1, fetchOptions);//rentout
+    const { data: data2 } = useFetch(apiUrl2, fetchOptions);//return
+    const { data: data3 } = useFetch(apiUrl3, fetchOptions);//cancel
+    const { data: data4 } = useFetch(apiUrl4, fetchOptions);//all
     // alert(data3);
     // console.log(data2);
 
+    const bookingTransactions = (data?.dataSet?.data || []).map(transaction => {
+        const bookingCashAmount = parseInt(transaction?.bookingCashAmount || 0, 10);
+        const bookingBankAmount = parseInt(transaction?.bookingBankAmount || 0, 10);
+        const bookingUPIAmount = parseInt(transaction?.bookingUPIAmount || 0, 10);
+        const invoiceAmount = parseInt(transaction?.invoiceAmount || 0, 10);
 
-    const bookingTransactions = (data?.dataSet?.data || []).map(transaction => ({
-        ...transaction,
-        bookingCashAmount: parseInt(transaction.bookingCashAmount, 10) || 0,
-        bookingBankAmount: parseInt(transaction.bookingBankAmount, 10) || 0,
-        invoiceAmount: parseInt(transaction.invoiceAmount, 10) || 0,
-        bookingBank1: parseInt(transaction.bookingBankAmount) || 0,
-        TotaltransactionBooking: parseInt(transaction.bookingBankAmount) + parseInt(transaction.bookingUPIAmount) + parseInt(transaction.bookingCashAmount),
-        Category: "Booking",
-        SubCategory: "Advance"
-    }));
+        const totalAmount = bookingCashAmount + bookingBankAmount + bookingUPIAmount;
 
+        return {
+            ...transaction,
+            date: transaction?.bookingDate || null,
+            bookingCashAmount,
+            bookingBankAmount,
+            billValue: transaction.invoiceAmount,
 
+            invoiceAmount,
+            bookingBank1: bookingBankAmount,
+            TotaltransactionBooking: totalAmount,
+            Category: "Booking",
+            SubCategory: "Advance",
+            totalTransaction: totalAmount,
+            cash: bookingCashAmount,
+            bank: bookingBankAmount,
+            upi: bookingUPIAmount,
+            amount: totalAmount,
+        };
+    });
 
-    const rentOutTransactions = (data1?.dataSet?.data || []).map(transaction => ({
-        ...transaction,
-        bookingCashAmount: parseInt(transaction.bookingCashAmount, 10) || 0,
-        bookingBankAmount: parseInt(transaction.bookingBankAmount, 10) || 0,
-        invoiceAmount: parseInt(transaction.invoiceAmount, 10) || 0,
-        securityAmount: parseInt(transaction.securityAmount, 10) || 0,
-        advanceAmount: parseInt(transaction.advanceAmount, 10) || 0,
-        Balance: (parseInt(transaction.invoiceAmount ?? 0, 10) - parseInt(transaction.advanceAmount ?? 0, 10)) || 0,
-        rentoutUPIAmount: parseInt(transaction.rentoutUPIAmount),
-        Category: "RentOut",
-        SubCategory: "Security",
-        SubCategory1: "Balance Payable"
+    const rentOutTransactions = (data1?.dataSet?.data || []).map(transaction => {
+        const rentoutCashAmount = parseInt(transaction?.rentoutCashAmount ?? 0, 10);
+        const rentoutBankAmount = parseInt(transaction?.rentoutBankAmount ?? 0, 10);
+        const invoiceAmount = parseInt(transaction?.invoiceAmount ?? 0, 10);
 
-    }));
+        const advanceAmount = parseInt(transaction?.advanceAmount ?? 0, 10);
+        const rentoutUPIAmount = parseInt(transaction?.rentoutUPIAmount ?? 0, 10);
+        const securityAmount = parseInt(transaction?.securityAmount ?? 0, 10);
 
+        return {
+            ...transaction,
+            date: transaction?.rentOutDate ?? "",
+            rentoutCashAmount,
+            rentoutBankAmount,
+            invoiceAmount,
+            billValue: transaction.invoiceAmount,
 
-    const returnOutTransactions = (data2?.dataSet?.data || []).map(transaction => ({
-        ...transaction,
-        returnBankAmount: -(parseInt(transaction.returnBankAmount, 10) + parseInt(transaction.returnUPIAmount) || 0),
-        returnCashAmount: -(parseInt(transaction.returnCashAmount, 10) || 0),
-        invoiceAmount: parseInt(transaction.invoiceAmount, 10) || 0,
-        advanceAmount: parseInt(transaction.advanceAmount, 10) || 0,
-        RsecurityAmount: -(parseInt(transaction.securityAmount, 10) || 0),
-        Category: "Return",
-        SubCategory: "security Refund"
-    }));
+            securityAmount,
+            advanceAmount,
+            Balance: invoiceAmount - advanceAmount,
+            rentoutUPIAmount,
+            Category: "RentOut",
+            SubCategory: "Security",
+            SubCategory1: "Balance Payable",
+            totalTransaction: rentoutCashAmount + rentoutBankAmount + rentoutUPIAmount,
+            cash: rentoutCashAmount,
+            bank: rentoutBankAmount,
+            upi: rentoutUPIAmount,
+            amount: rentoutCashAmount + rentoutBankAmount + rentoutUPIAmount,
+        };
+    });
+
+    const returnOutTransactions = (data2?.dataSet?.data || []).map(transaction => {
+        const returnBankAmount = -(parseInt(transaction?.returnBankAmount || 0, 10));
+        const returnCashAmount = -(parseInt(transaction?.returnCashAmount || 0, 10));
+        const returnUPIAmount = -(parseInt(transaction?.returnUPIAmount || 0, 10));
+        const invoiceAmount = parseInt(transaction?.invoiceAmount || 0, 10);
+        const advanceAmount = parseInt(transaction?.advanceAmount || 0, 10);
+        const RsecurityAmount = -(parseInt(transaction?.securityAmount || 0, 10));
+
+        const totalAmount = returnBankAmount + returnCashAmount + returnUPIAmount;
+
+        return {
+            ...transaction,
+            date: transaction?.returnedDate || null,
+            returnBankAmount,
+            returnCashAmount,
+            returnUPIAmount,
+            invoiceAmount,
+            advanceAmount,
+            billValue: invoiceAmount,
+            amount: totalAmount,
+            totalTransaction: totalAmount,
+            RsecurityAmount,
+            Category: "Return",
+            SubCategory: "Security Refund",
+            cash: returnCashAmount,
+            bank: returnBankAmount,
+            upi: returnUPIAmount,
+        };
+    });
     const Transactionsall = (data3?.data || []).map(transaction => ({
         ...transaction,
         locCode: currentusers.locCode,
-        date: transaction.date.split("T")[0] // Correctly extract only the date
+        date: transaction.date.split("T")[0],// Correctly extract only the date
+        Category: transaction.type,
+        subCategory: transaction.category,
+        billValue: transaction.amount,
+
+
+
+
     }));
+    // alert(Transactionsall);
+
 
     const canCelTransactions = (data4?.dataSet?.data || []).map(transaction => ({
         ...transaction,
+        date: transaction.cancelDate,
         Category: "Cancel",
-        SubCategory: "cancellation Refund"
-
+        SubCategory: "cancellation Refund",
+        billValue: transaction.invoiceAmount,
+        amount: parseInt(transaction.deleteUPIAmount) + parseInt(transaction.deleteCashAmount) + parseInt(transaction.deleteBankAmount),
+        totalTransaction: parseInt(transaction.deleteUPIAmount) + parseInt(transaction.deleteCashAmount) + parseInt(transaction.deleteBankAmount),
+        cash: parseInt(transaction.deleteCashAmount),
+        bank: parseInt(transaction.deleteBankAmount),
+        upi: parseInt(transaction.deleteUPIAmount),
 
     }));
     // alert(apiUrl4)
     // console.log("Hi" + data4);
     // alert(canCelTransactions)
     const allTransactions = [...bookingTransactions, ...rentOutTransactions, ...returnOutTransactions, ...canCelTransactions, ...Transactionsall];
+    console.log(data4);
 
     // console.log(allTransactions);
     const [selectedCategory, setSelectedCategory] = useState(categories[0]);
@@ -356,7 +438,7 @@ const Datewisedaybook = () => {
                                                     {transaction.Category === 'RentOut' ? (
                                                         <>
                                                             <tr key={`${index}-1`}>
-                                                                <td className="border p-2">{transaction.rentOutDate || transaction.bookingDate}</td>
+                                                                <td className="border p-2">{transaction.date}</td>
                                                                 <td className="border p-2">{transaction.invoiceNo}</td>
                                                                 <td className="border p-2">{transaction.customerName}</td>
                                                                 <td rowSpan="2" className="border p-2">{transaction.Category}</td>
@@ -382,7 +464,7 @@ const Datewisedaybook = () => {
                                                         </>
                                                     ) : (
                                                         <tr key={index}>
-                                                            <td className="border p-2">{transaction.returnedDate || transaction.rentOutDate || transaction.cancelDate || transaction.bookingDate || transaction.date}</td>
+                                                            <td className="border p-2">{transaction.date}</td>
                                                             <td className="border p-2">{transaction.invoiceNo || transaction.locCode}</td>
                                                             <td className="border p-2">{transaction.customerName}</td>
                                                             <td className="border p-2">{transaction.Category || transaction.type}</td>
@@ -441,6 +523,15 @@ const Datewisedaybook = () => {
                     <button onClick={handlePrint} className="mt-6 w-[200px] float-right cursor-pointer bg-blue-600 text-white py-2 rounded-lg flex items-center justify-center gap-2">
                         <span>📥 Take pdf</span>
                     </button>
+
+
+                    {/* 
+                   */}
+
+                    <CSVLink data={filteredTransactions} headers={headers} filename={`${fromDate} to ${toDate} report.csv`}>
+                        <button className="mt-6 w-[200px] float-right cursor-pointer bg-blue-600 text-white py-2 rounded-lg mr-[30px] flex items-center justify-center gap-2">Export CSV</button>
+                    </CSVLink>
+
 
                 </div>
 
