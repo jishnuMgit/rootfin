@@ -247,6 +247,8 @@ const Datewisedaybook = () => {
         locCode: currentusers.locCode,
         date: transaction.date.split("T")[0],// Correctly extract only the date
         Category: transaction.type,
+        cash1: transaction.cash,
+        bank1: transaction.bank,
         subCategory: transaction.category,
         billValue: transaction.amount,
 
@@ -299,7 +301,7 @@ const Datewisedaybook = () => {
         (filteredTransactions?.reduce((sum, item) =>
             sum +
             (parseInt(item.bookingBank1, 10) || 0) +
-            (parseInt(item.bank, 10) || 0) +
+            (parseInt(item.bank1, 10) || 0) +
             (parseInt(item.rentoutBankAmount, 10) || 0) +
             (parseInt(item.deleteBankAmount, 10) || 0) * -1 +
             (parseInt(item.returnBankAmount, 10) || 0),
@@ -314,7 +316,7 @@ const Datewisedaybook = () => {
             sum +
             (parseInt(item.bookingCashAmount, 10) || 0) +
             (parseInt(item.rentoutCashAmount, 10) || 0) +
-            (parseInt(item.cash, 10) || 0) +
+            (parseInt(item.cash1, 10) || 0) +
             ((parseInt(item.deleteCashAmount, 10) || 0) * -1) + // Ensure deletion is properly subtracted
             (parseInt(item.returnCashAmount, 10) || 0),
             0
@@ -486,7 +488,7 @@ const Datewisedaybook = () => {
                                                                 {parseInt(transaction.invoiceAmount) || parseInt(transaction.amount) || 0}
                                                             </td>
                                                             <td className="border p-2">
-                                                                {parseInt(transaction.rentoutCashAmount) || parseInt(transaction.bookingCashAmount) || parseInt(transaction.returnCashAmount) || parseInt(transaction.cash) || -(parseInt(transaction.deleteCashAmount)) || 0}
+                                                                {-(parseInt(transaction.deleteCashAmount)) || parseInt(transaction.rentoutCashAmount) || parseInt(transaction.bookingCashAmount) || parseInt(transaction.returnCashAmount) || parseInt(transaction.cash) || 0}
                                                             </td>
                                                             <td className="border p-2">
                                                                 {parseInt(transaction.rentoutBankAmount) || parseInt(transaction.bank) || parseInt(transaction.bookingBank1) || parseInt(transaction.returnBankAmount) || parseInt(transaction.deleteBankAmount) * -1 || 0}

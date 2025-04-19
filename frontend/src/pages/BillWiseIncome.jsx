@@ -571,7 +571,7 @@ const DayBookInc = () => {
                                                                     {parseInt(transaction.invoiceAmount) || parseInt(transaction.amount) || 0}
                                                                 </td>
                                                                 <td className="border p-2">
-                                                                    {parseInt(transaction.rentoutCashAmount) || parseInt(transaction.bookingCashAmount) || parseInt(transaction.returnCashAmount) || parseInt(transaction.cash) || -(parseInt(transaction.deleteCashAmount)) || 0}
+                                                                    {-(parseInt(transaction.deleteCashAmount)) ||parseInt(transaction.rentoutCashAmount) || parseInt(transaction.bookingCashAmount)  || parseInt(transaction.returnCashAmount) || parseInt(transaction.cash) ||  0}
                                                                 </td>
                                                                 <td className="border p-2">
                                                                     {parseInt(transaction.rentoutBankAmount) || parseInt(transaction.bank) || parseInt(transaction.bookingBank1) || parseInt(transaction.returnBankAmount) || parseInt(transaction.deleteBankAmount) * -1 || 0}
